@@ -24,7 +24,6 @@ public class MeatListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         //unitTest1(event);
-        //event.getPlayer().sendMessage("meat");
     }
 
     public void unitTest1(PlayerJoinEvent event){
@@ -37,11 +36,9 @@ public class MeatListener implements Listener {
         player.getInventory().addItem(WitcherSword);
     }
 
-
     @EventHandler
     public void getMobHead(PlayerInteractEntityEvent event){
         Player player = event.getPlayer();
-        //Action action = event.getAction();
         ItemStack item = player.getItemInHand();
         Entity clickedEntity = event.getRightClicked();
         boolean dead = clickedEntity.isDead();
@@ -50,44 +47,36 @@ public class MeatListener implements Listener {
         }
         else{
             if (item.getItemMeta().getDisplayName().equals("Witcher Sword")) {
-                player.sendMessage(item.getItemMeta().getDisplayName());
                 if (dead) {
                     switch (clickedEntity.getType()) {
                         case CREEPER:
-                            //give creeper's head to the player
-                            player.sendMessage("given");
+                            //gives creeper's head to the player
                             ItemStack creeperHead = new ItemStack(Material.CREEPER_HEAD, 1);
                             player.getInventory().addItem(creeperHead);
                             break;
                         case ZOMBIE:
+                            //gives zombie's head to the player
                             ItemStack zombieHead = new ItemStack(Material.ZOMBIE_HEAD, 1);
                             player.getInventory().addItem(zombieHead);
                             break;
                         case SKELETON:
+                            //gives skeleton's skull to the player
                             ItemStack skeletonHead = new ItemStack(Material.SKELETON_SKULL);
                             player.getInventory().addItem(skeletonHead);
                         case PLAYER:
+                            //gives killed player's head to the player
                             ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
                             player.getInventory().addItem(playerHead);
                         default:
-                            //event.setCancelled(true);
                             break;
                     }
                 }
-                else
-                {
-                    player.sendMessage("not still dead");
-                }
-            }
-            else{
-                player.sendMessage("fail");
-                player.sendMessage(item.getItemMeta().getDisplayName());
             }
         }
-
     }
 
     public void setCreeperSteak(){
+        //turns a cooked steak item into a creeper's steak
         ItemStack steak = new ItemStack(Material.COOKED_BEEF, 1);
         ItemMeta steakMeta = steak.getItemMeta();
         steakMeta.setDisplayName("Creeper's steak");
@@ -96,6 +85,7 @@ public class MeatListener implements Listener {
 
     public void setWitcherSword(ItemStack item)
     {
+        //turns an iron sword into a witcher one
         ItemMeta itemM = item.getItemMeta();
         itemM.setDisplayName("Witcher Sword");
         itemM.setLore(Arrays.asList("able to behead mobs!"));
