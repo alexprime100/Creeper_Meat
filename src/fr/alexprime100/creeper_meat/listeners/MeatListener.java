@@ -38,7 +38,7 @@ public class MeatListener implements Listener {
     }
 
 
-    @EventHandler 
+    @EventHandler
     public void getMobHead(PlayerInteractEntityEvent event){
         Player player = event.getPlayer();
         //Action action = event.getAction();
