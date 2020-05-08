@@ -1,0 +1,5 @@
+name: Creeper_Meat
+version: 1.0
+author: AlexPrime100
+main: fr.alexprime100.creeper_meat.Main
+api-version: '1.13'
