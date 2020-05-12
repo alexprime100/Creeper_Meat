@@ -144,26 +144,26 @@ public class MeatListener implements Listener {
                                 if (level == 3) {
                                     ItemStack creeperSteak = new ItemStack(Material.COOKED_BEEF, 1);
                                     ItemMeta creeperSteakMeta = creeperSteak.getItemMeta();
-                                    if (clickedBlock.getRelative(0,-1,0).getType() == Material.CAMPFIRE){    //steak will be well cooked
-                                        if (inventory.contains(Material.HONEY_BOTTLE,1)){   //steak will also be cleaned and certified
+                                    if (clickedBlock.getRelative(0,-1,0).getType() == Material.CAMPFIRE){
+                                        if (inventory.contains(Material.HONEY_BOTTLE,1)){
                                             creeperSteakMeta.setDisplayName("Creeper steak");
-                                            creeperSteakMeta.setLore(Arrays.asList("Certified by Steakdecreeper"));
+                                            creeperSteakMeta.setLore(Arrays.asList(""));
                                             inventory.removeItem(new ItemStack(Material.HONEY_BOTTLE,1));
                                         }
-                                        else{     //steak won't be cleaned
+                                        else{
                                             creeperSteakMeta.setDisplayName("Creeper steak");
                                             creeperSteakMeta.setLore(Arrays.asList("Cooked in hot cauldron"));
                                         }
                                     }
-                                    else{   //steak will be raw
+                                    else{
                                         creeperSteak = new ItemStack(Material.BEEF, 1);
                                         creeperSteakMeta = creeperSteak.getItemMeta();
-                                        if (inventory.contains(Material.HONEY_BOTTLE,1)){   //steak will be cleaned
+                                        if (inventory.contains(Material.HONEY_BOTTLE,1)){
                                             creeperSteakMeta.setDisplayName("Raw creeper steak");
                                             creeperSteakMeta.setLore(Arrays.asList("cooked with expertise"));
                                             inventory.removeItem(new ItemStack(Material.HONEY_BOTTLE,1));
                                         }
-                                        else{     //steak won't be cleaned
+                                        else{
                                             creeperSteakMeta.setDisplayName("Raw creeper steak");
                                             creeperSteakMeta.setLore(Arrays.asList(""));
                                         }
@@ -217,7 +217,6 @@ public class MeatListener implements Listener {
         ItemStack meal = event.getItem();
 
         if (meal.hasItemMeta()) {
-            player.sendMessage("Lore : " + meal.getItemMeta().getLore().get(0));
             ArrayList<PotionEffect> effects = new ArrayList<PotionEffect>();
             if (meal.getItemMeta().getDisplayName().equals("Raw creeper meat")) {
                 effects.add(new PotionEffect(PotionEffectType.HARM, 60, 2, true, true, true));
@@ -225,11 +224,11 @@ public class MeatListener implements Listener {
                 effects.add(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 60, 2, true, true, true));
             }
             if (meal.getItemMeta().getDisplayName().equals("Raw creeper steak")){
-                if(meal.getItemMeta().getLore().get(0).equals("")) {    //raw not cleaned steak
+                if(meal.getItemMeta().getLore().get(0).equals("")) {
                     effects.add(new PotionEffect(PotionEffectType.POISON, 20 * 10, 2, true, true, true));
                     effects.add(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 60, 2, true, true, true));
                 }
-                if(meal.getItemMeta().getLore().get(0).equals("cooked with expertise")) {     //raw cleaned steak
+                if(meal.getItemMeta().getLore().get(0).equals("cooked with expertise")) {
                     int random2 = (int)(Math.random())*10;
                     if (player.getFoodLevel() > 18){
                         player.setFoodLevel(20);
@@ -243,28 +242,21 @@ public class MeatListener implements Listener {
                 }
             }
 
-            if (meal.getItemMeta().getDisplayName().equals("Creeper steak")){   //cooked steak
-                player.sendMessage("ok0");
+            if (meal.getItemMeta().getDisplayName().equals("Creeper steak")){
                 int[][] coeff = new int[11][2];
                 int random= -1;
                 coeff[0][0] = 0;
                 coeff[10][1] = 100;
-                if (meal.getItemMeta().getLore().get(0).equals("Certified by Steakdecreeper")){
-                    player.sendMessage("certified steak");
+                if (meal.getItemMeta().getLore().get(0).equals("")){
                     effects.add(new PotionEffect(PotionEffectType.LUCK, 20 * 60, 2, true, true, true));
-                    player.sendMessage("size list : " + effects.size());
                     effects.add(new PotionEffect(PotionEffectType.REGENERATION, 20 * 60, 2, true, true, true));
-                    player.sendMessage("size list : " + effects.size());
                     effects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 60, 2, true, true, true));
-                    player.sendMessage("size list : " + effects.size());
                     effects.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 60, 2, true, true, true));
-                    player.sendMessage("size list : " + effects.size());
                     effects.add(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 60, 2, true, true, true));
-                    player.sendMessage("size list : " + effects.size());
                     player.setFoodLevel(20);
                 }
-                if (meal.getItemMeta().getLore().get(0).equals("Cooked in master furnace")) {    //undercooked uncleaned steak
-                    random = (int) (Math.random()) * 100;
+                if (meal.getItemMeta().getLore().get(0).equals("Cooked in master furnace")) {
+                    random = (int) (Math.random() * 100);
                     coeff[1][0] = 25;
                     coeff[2][0] = 45;
                     coeff[3][0] = 60;
@@ -280,8 +272,8 @@ public class MeatListener implements Listener {
                     }
                     //effects = setRandomEffects(player, coeff);
                 }
-                if (meal.getItemMeta().getLore().get(0).equals("Cooked with expertise in master furnace")) {    //undercooked cleaned steak
-                    random = (int) (Math.random()) * 100;
+                if (meal.getItemMeta().getLore().get(0).equals("Cooked in hot cauldron")) {
+                    random = (int) (Math.random() * 100);
                     coeff[1][0] = 15;
                     coeff[2][0] = 30;
                     coeff[3][0] = 40;
@@ -295,10 +287,10 @@ public class MeatListener implements Listener {
                     for (int i = 0; i < 10; i++) {
                         coeff[i][1] = coeff[i + 1][0];
                     }
-                    //effects = setRandomEffects(player, coeff);
+
                 }
-                if (meal.getItemMeta().getLore().get(0).equals("Cooked in hot cauldron")) {    //well cooked uncleaned steak
-                    random = (int) (Math.random()) * 100;
+                if (meal.getItemMeta().getLore().get(0).equals("Cooked with expertise in master furnace")) {
+                    random = (int) (Math.random() * 100);
                     coeff[1][0] = 0;
                     coeff[2][0] = 0;
                     coeff[3][0] = 5;
@@ -312,9 +304,10 @@ public class MeatListener implements Listener {
                     for (int i = 0; i < 10; i++) {
                         coeff[i][1] = coeff[i + 1][0];
                     }
-                    //effects = setRandomEffects(player, coeff);
+
                 }
                 if (random >= 0) {
+                    player.setFoodLevel(player.getFoodLevel()-8);
                     if (random >= coeff[0][0] && random < coeff[0][1]) {   //kills slowly the player
                         while (player.getHealth() > 0) {
                             if (player.getHealth() < 1) {
@@ -338,7 +331,7 @@ public class MeatListener implements Listener {
                         effects.add(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 2, true, true, true));
                         effects.add(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 60, 2, true, true, true));
                     }
-                    if (random >= coeff[4][0] && random < coeff[4][1]) {   //nausées & lenteur
+                    if (random >= coeff[4][0] && random < coeff[4][1]) {
                         effects.add(new PotionEffect(PotionEffectType.CONFUSION, 20 * 60, 2, true, true, true));
                         effects.add(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 2, true, true, true));
                     }
@@ -366,7 +359,7 @@ public class MeatListener implements Listener {
                             player.setFoodLevel(20);
                         }
                     }
-                    if (random >= coeff[10][0] && random < coeff[10][1]) {    //almost as good as a certified creeper steak
+                    if (random >= coeff[10][0] && random < coeff[10][1]) {
                         effects.add(new PotionEffect(PotionEffectType.REGENERATION, 20 * 60, 2, true, true, true));
                         effects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 60, 2, true, true, true));
                         effects.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 60, 2, true, true, true));
@@ -381,71 +374,4 @@ public class MeatListener implements Listener {
             }
         }
     }
-
-    /*public ArrayList<PotionEffect> setRandomEffects(Player player, int[][] coeff){
-        ArrayList<PotionEffect> effects = new ArrayList<PotionEffect>();
-        int n= -1;
-        n = (int) (Math.random()) * 100;
-        if (n>= 0) {
-            if (random >= coeff[0][0] && random < coeff[0][1]) {   //kills slowly the player
-                while (player.getFoodLevel() > 0) {
-                    if (player.getHealth() < 1) {
-                        player.setHealth(0);
-                    } else {
-                        player.setHealth(player.getHealth() - 1);
-                    }
-                }
-            }
-            if (random >= coeff[1][0] && random < coeff[1][1]) {   //instant damages
-                if (player.getHealth() >= 6) {
-                    player.setHealth(player.getHealth() - 6);
-                } else {
-                    player.setHealth(0);
-                }
-            }
-            if (random >= coeff[2][0] && random < coeff[2][1]) {   //poison
-                effects.add(new PotionEffect(PotionEffectType.POISON, 20 * 20, 1));
-            }
-            if (random >= coeff[3][0] && random < coeff[3][1]) {   //blindness & slowness
-                effects.add(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 2, true, true, true));
-                effects.add(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 60, 2, true, true, true));
-            }
-            if (random >= coeff[4][0] && random < coeff[4][1]) {   //nausées & lenteur
-                effects.add(new PotionEffect(PotionEffectType.CONFUSION, 20 * 60, 2, true, true, true));
-                effects.add(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 2, true, true, true));
-            }
-            if (random >= coeff[5][0] && random < coeff[5][1]) {   //slowness
-                effects.add(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 2, true, true, true));
-            }
-            if (random >= coeff[6][0] && random < coeff[6][1]) {   //tiredness
-                effects.add(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 60, 2, true, true, true));
-            }
-            if (random >= coeff[7][0] && random < coeff[7][1]) {   //weakness
-                effects.add(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 60, 2, true, true, true));
-            }
-            if (random >= coeff[8][0] && random < coeff[8][1]) {   //+4 hunger
-                if (player.getFoodLevel() < 16) {
-                    player.setFoodLevel(player.getFoodLevel() + 4
-                    );
-                } else {
-                    player.setFoodLevel(20);
-                }
-            }
-            if (random >= coeff[9][0] && random < coeff[9][1]) {  //+8 hunger
-                if (player.getFoodLevel() < 12) {
-                    player.setFoodLevel(player.getFoodLevel() + 8);
-                } else {
-                    player.setFoodLevel(20);
-                }
-            }
-            if (random >= coeff[10][0] && random < coeff[10][1]) {    //almost as good as a certified creeper steak
-                effects.add(new PotionEffect(PotionEffectType.REGENERATION, 20 * 60, 2, true, true, true));
-                effects.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20 * 60, 2, true, true, true));
-                effects.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 60, 2, true, true, true));
-                effects.add(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 60, 2, true, true, true));
-                player.setFoodLevel(20);
-            }
-        }
-        return effects;
-    }*/
 }
