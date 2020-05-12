@@ -8,8 +8,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        System.out.println("Creeper_meat just started");
-        getServer().getPluginManager().registerEvents(new MeatListener(this), this);
+        System.out.println("Creeper_meat2 just started");
+        getServer().getPluginManager().registerEvents(new MeatListener(), this);
         //getServer().getPluginManager().registerEvents(new TestListener(this), this);
     }
 
