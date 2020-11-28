@@ -1,4 +1,4 @@
-package fr.alexprime100.creeper_meat.listeners;
+package fr.alexprime100.creeper_meat;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,10 +12,11 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,26 +29,14 @@ public class MeatListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event){
-        //unitTest1(event);
-    }
-
-    public void unitTest1(PlayerJoinEvent event){
-        Player player = event.getPlayer();
-        ItemStack WitcherSword = new ItemStack(Material.IRON_SWORD, 1);
-        ItemMeta custom = WitcherSword.getItemMeta();
-        custom.setDisplayName("Witcher Sword");
-        custom.setLore(Arrays.asList("able to behead mobs!"));
-        WitcherSword.setItemMeta(custom);
-        player.getInventory().addItem(WitcherSword);
-    }
-
-    @EventHandler
     public void onClickEntity(PlayerInteractEntityEvent event){
         Player player = event.getPlayer();
+        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
         ItemStack item = player.getInventory().getItemInMainHand();
         Entity clickedEntity = event.getRightClicked();
+        player.sendMessage(clickedEntity.getName());
         boolean dead = clickedEntity.isDead();
+
         if (item == null){
             return;
         }
@@ -69,10 +58,6 @@ public class MeatListener implements Listener {
                             //gives skeleton's skull to the player
                             ItemStack skeletonHead = new ItemStack(Material.SKELETON_SKULL,1);
                             player.getInventory().addItem(skeletonHead);
-                        case PLAYER:
-                            //gives killed player's head to the player
-                            ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD,1);
-                            player.getInventory().addItem(playerHead);
                         default:
                             break;
                     }
@@ -93,15 +78,14 @@ public class MeatListener implements Listener {
         switch (item.getType()){
             case IRON_SWORD:
                 if (action == Action.LEFT_CLICK_BLOCK && clickedBlock.getType() == Material.SMITHING_TABLE && !item.hasItemMeta()) {
-                    player.sendMessage("Checking if you have enough redstone...");
-                    ItemStack[] ingredients = new ItemStack[3];
+                    ItemStack[] ingredients = new ItemStack[4];
                     ingredients[0] = new ItemStack(Material.REDSTONE, 3);
                     ingredients[1] = new ItemStack(Material.FLINT,2);
                     ingredients[2] = new ItemStack(Material.LAVA_BUCKET, 1);
+                    ingredients[3] = new ItemStack(Material.SPIDER_EYE,1);
 
-                    if (inventory.contains(Material.REDSTONE, 3) && inventory.contains(Material.LAVA_BUCKET) && inventory.contains(Material.FLINT,2))
+                    if (inventory.contains(Material.REDSTONE, 3) && inventory.contains(Material.LAVA_BUCKET) && inventory.contains(Material.FLINT,2) &&inventory.contains(Material.SPIDER_EYE,1))
                     {
-                        player.sendMessage("yes !");
                         //turns an iron sword into a witcher one
                         ItemMeta itemM = item.getItemMeta();
                         itemM.setDisplayName("Witcher Sword of the school of the creeper");
@@ -110,9 +94,6 @@ public class MeatListener implements Listener {
                             inventory.removeItem(ingredient);
                         }
                         item.setItemMeta(itemM);
-                    }
-                    else{
-                        player.sendMessage("You don't have enough redstone to build a witcher sword");
                     }
                 }
                 break;
@@ -194,13 +175,8 @@ public class MeatListener implements Listener {
                 if (sourceItem.getItemMeta().getDisplayName().equals("Raw creeper steak")){
                     ItemMeta cookedSteakMeta = resultItem.getItemMeta();
                     cookedSteakMeta.setDisplayName("Creeper steak");
-                    if (sourceItem.getItemMeta().getLore().size() > 0){
-                        if (sourceItem.getItemMeta().getLore().get(0).equals("Cooked with expertise")) {
-                            cookedSteakMeta.setLore(Arrays.asList("Cooked with expertise in master furnace"));
-                        }
-                        else{
-                            cookedSteakMeta.setLore(Arrays.asList("Cooked in master furnace"));
-                        }
+                    if (sourceItem.getItemMeta().getLore().get(0).equals("Cooked with expertise")) {
+                        cookedSteakMeta.setLore(Arrays.asList("Cooked with expertise in master furnace"));
                     }
                     else{
                         cookedSteakMeta.setLore(Arrays.asList("Cooked in master furnace"));
@@ -229,14 +205,14 @@ public class MeatListener implements Listener {
                     effects.add(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 60, 2, true, true, true));
                 }
                 if(meal.getItemMeta().getLore().get(0).equals("cooked with expertise")) {
-                    int random2 = (int)(Math.random())*10;
+                    int random = (int)(Math.random()*10);
                     if (player.getFoodLevel() > 18){
                         player.setFoodLevel(20);
                     }
                     else{
                         player.setFoodLevel(player.getFoodLevel()+2);
                     }
-                    if (random2 >= 0 && random2 < 3){
+                    if (random >= 0 && random < 3){
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20*30, 1));
                     }
                 }
@@ -270,7 +246,6 @@ public class MeatListener implements Listener {
                     for (int i = 0; i < 10; i++) {
                         coeff[i][1] = coeff[i + 1][0];
                     }
-                    //effects = setRandomEffects(player, coeff);
                 }
                 if (meal.getItemMeta().getLore().get(0).equals("Cooked in hot cauldron")) {
                     random = (int) (Math.random() * 100);
@@ -287,7 +262,6 @@ public class MeatListener implements Listener {
                     for (int i = 0; i < 10; i++) {
                         coeff[i][1] = coeff[i + 1][0];
                     }
-
                 }
                 if (meal.getItemMeta().getLore().get(0).equals("Cooked with expertise in master furnace")) {
                     random = (int) (Math.random() * 100);
@@ -304,18 +278,20 @@ public class MeatListener implements Listener {
                     for (int i = 0; i < 10; i++) {
                         coeff[i][1] = coeff[i + 1][0];
                     }
-
                 }
+                random = 0;
                 if (random >= 0) {
                     player.setFoodLevel(player.getFoodLevel()-8);
                     if (random >= coeff[0][0] && random < coeff[0][1]) {   //kills slowly the player
-                        while (player.getHealth() > 0) {
+                        DamageTimer timer = new DamageTimer(player);
+                        timer.runTaskTimer((Plugin) this, 0, 20);
+                        /*while (player.getHealth() > 0) {
                             if (player.getHealth() < 1) {
                                 player.setHealth(0);
                             } else {
                                 player.setHealth(player.getHealth() - 1);
                             }
-                        }
+                        }*/
                     }
                     if (random >= coeff[1][0] && random < coeff[1][1]) {   //instant damages
                         if (player.getHealth() >= 6) {

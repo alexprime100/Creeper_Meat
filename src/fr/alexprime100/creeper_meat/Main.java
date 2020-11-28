@@ -1,6 +1,5 @@
 package fr.alexprime100.creeper_meat;
 
-import fr.alexprime100.creeper_meat.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -10,7 +9,8 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         System.out.println("Creeper_meat2 just started");
         getServer().getPluginManager().registerEvents(new MeatListener(), this);
-        //getServer().getPluginManager().registerEvents(new TestListener(this), this);
+        //Timer timer = new Timer();
+        //timer.runTaskTimer(this, 0, 20);
     }
 
     @Override
